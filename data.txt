@@ -1,0 +1,36 @@
+# Step 1: Mount Google Drive
+from google.colab import drive
+drive.mount('/content/gdrive')
+
+# Step 2: Import Libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, classification_report
+
+# Step 3: Load Datasets
+# Replace 'your_folder_name' with the actual folder name in your Google Drive
+indian_data = pd.read_excel('/content/gdrive/MyDrive/your_folder_name/Indian Dataset.xlsx')
+japanese_data = pd.read_excel('/content/gdrive/MyDrive/your_folder_name/Japanese Dataset.xlsx')
+
+# Step 4: Preprocess Japanese Dataset
+# Assuming 'target_column' is the column you want to predict
+X = japanese_data.drop(['target_column'], axis=1)
+y = japanese_data['target_column']
+
+# Split the data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 5: Build and Train Model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Step 6: Evaluate Model
+y_pred = model.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred))
+print('Classification Report:\n', classification_report(y_test, y_pred))
+
+# Step 7: Predict on Indian Dataset
+# Assuming the Indian dataset has the same features as the Japanese dataset
+indian_predictions = model.predict(indian_data)
+print('Predictions for Indian Dataset:', indian_predictions)
